@@ -1,10 +1,12 @@
 package com.developer.productservice.dto.request;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
+import java.math.BigDecimal;
 
-@Builder
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
 public record ProductRequest(
-        @NotNull String name,
-        @NotNull Double price) {
+        @NotBlank String name,
+        @NotNull @PositiveOrZero BigDecimal price) {
 }

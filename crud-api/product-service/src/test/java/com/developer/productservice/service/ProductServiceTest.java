@@ -3,6 +3,8 @@ package com.developer.productservice.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,14 +30,14 @@ public class ProductServiceTest {
 
     @Test
     void create_ShouldCreateProduct_WhenProductIsValid() {
-        ProductRequest request = ProductRequest.builder()
-                .name("Laptop")
-                .price(50000D)
-                .build();
+        ProductRequest request = new ProductRequest(
+                "Laptop",
+                BigDecimal.valueOf(50000)
+        );
 
         Product product = Product.builder()
                 .name("Laptop")
-                .price(50000D)
+                .price(BigDecimal.valueOf(50000))
                 .build();
 
         when(productMapper.toProductEntity(request)).thenReturn(product);

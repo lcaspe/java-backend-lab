@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -32,7 +34,7 @@ public class ProductControllerTest {
                 Product.builder()
                         .id(1L)
                         .name("Laptop")
-                        .price(50000D)
+                        .price(BigDecimal.valueOf(50000))
                         .build());
 
         mockMvc.perform(post("/api/v1/products")
