@@ -9,6 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -47,5 +50,23 @@ public class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Laptop"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    @NullSource
+        // Combines null, empty, and blank strings
+    void shouldNotCreateProduct_WhenProductNameIsInvalid(String invalidName) throws Exception {
+        String payload = String.format("""
+                {
+                    "name": %s,
+                    "price": 50000
+                }
+                """, invalidName == null ? "null" : "\"" + invalidName + "\"");
+
+        mockMvc.perform(post("/api/v1/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest());
     }
 }
