@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.developer.productservice.dto.request.ProductRequest;
-import com.developer.productservice.model.Product;
+import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody ProductRequest productRequest) {
+    public ResponseEntity<ProductResponse> create(@Valid @RequestBody ProductRequest productRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.create(productRequest));
     }
 }

@@ -3,6 +3,7 @@ package com.developer.productservice.service;
 import org.springframework.stereotype.Service;
 
 import com.developer.productservice.dto.request.ProductRequest;
+import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.mapper.ProductMapper;
 import com.developer.productservice.model.Product;
 import com.developer.productservice.repository.ProductRepository;
@@ -15,8 +16,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    public Product create(ProductRequest productRequest) {
+    public ProductResponse create(ProductRequest productRequest) {
         Product product = productMapper.toProductEntity(productRequest);
-        return productRepository.save(product);
+        return productMapper.toProductResponse(productRepository.save(product));
     }
 }

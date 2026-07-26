@@ -16,7 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.developer.productservice.dto.request.ProductRequest;
-import com.developer.productservice.model.Product;
+import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.service.ProductService;
 
 @WebMvcTest(ProductController.class)
@@ -31,11 +31,10 @@ public class ProductControllerTest {
     @Test
     void shouldCreateProduct() throws Exception {
         when(productService.create(any(ProductRequest.class))).thenReturn(
-                Product.builder()
-                        .id(1L)
-                        .name("Laptop")
-                        .price(BigDecimal.valueOf(50000))
-                        .build());
+                new ProductResponse(
+                        1L,
+                        "Laptop",
+                        BigDecimal.valueOf(50000)));
 
         mockMvc.perform(post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)

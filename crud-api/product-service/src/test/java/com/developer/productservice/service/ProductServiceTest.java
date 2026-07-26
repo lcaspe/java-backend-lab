@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.developer.productservice.dto.request.ProductRequest;
+import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.mapper.ProductMapper;
 import com.developer.productservice.model.Product;
 import com.developer.productservice.repository.ProductRepository;
@@ -40,11 +41,17 @@ public class ProductServiceTest {
                 .price(BigDecimal.valueOf(50000))
                 .build();
 
+        ProductResponse productResponse = new ProductResponse(
+                1L,
+                "Laptop",
+                BigDecimal.valueOf(50000));
+
         when(productMapper.toProductEntity(request)).thenReturn(product);
         when(productRepository.save(product)).thenReturn(product);
+        when(productMapper.toProductResponse(product)).thenReturn(productResponse);
 
-        Product savedProduct = productService.create(request);
+        ProductResponse savedProductResponse = productService.create(request);
 
-        assertThat(savedProduct).isEqualTo(product);
+        assertThat(savedProductResponse).isEqualTo(productResponse);
     }
 }
