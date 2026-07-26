@@ -1,5 +1,7 @@
 package com.developer.productservice.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -14,4 +16,6 @@ public interface ProductMapper {
     public Product toProductEntity(ProductRequest productRequest);
 
     public ProductResponse toProductResponse(Product product);
+
+    public List<ProductResponse> toProductResponseList(List<Product> products);
 }
