@@ -1,12 +1,13 @@
 package com.developer.productservice.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.developer.productservice.dto.request.ProductRequest;
+import com.developer.productservice.dto.response.PagedResponse;
 import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.service.ProductService;
 import jakarta.validation.Valid;
@@ -25,12 +26,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> getAll() {
-        return productService.getAll();
+    public ResponseEntity<PagedResponse<ProductResponse>> getAll(@PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(productService.getAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ProductResponse getById(@PathVariable Long id) {
-        return productService.getById(id);
+    public ResponseEntity<ProductResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getById(id));
     }
 }

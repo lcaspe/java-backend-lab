@@ -1,8 +1,7 @@
 package com.developer.productservice.mapper;
 
-import java.util.List;
-
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 import com.developer.productservice.dto.request.ProductRequest;
@@ -10,12 +9,12 @@ import com.developer.productservice.dto.response.ProductResponse;
 import com.developer.productservice.model.Product;
 
 @Mapper(componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+        unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface ProductMapper {
 
-    public Product toProductEntity(ProductRequest productRequest);
+    Product toProductEntity(ProductRequest productRequest);
 
-    public ProductResponse toProductResponse(Product product);
+    ProductResponse toProductResponse(Product product);
 
-    public List<ProductResponse> toProductResponseList(List<Product> products);
+    void updateProductFromRequest(ProductRequest request, @MappingTarget Product product);
 }
