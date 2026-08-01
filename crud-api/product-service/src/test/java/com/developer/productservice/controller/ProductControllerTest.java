@@ -1,5 +1,7 @@
 package com.developer.productservice.controller;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,7 +57,6 @@ public class ProductControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
     @NullSource
-        // Combines null, empty, and blank strings
     void shouldNotCreateProduct_WhenProductNameIsInvalid(String invalidName) throws Exception {
         String payload = String.format("""
                 {
@@ -67,6 +68,27 @@ public class ProductControllerTest {
         mockMvc.perform(post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(payload))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("name must not be blank"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(doubles = {0, -50000D})
+    @NullSource
+    void shouldNotCreateProduct_WhenProductPriceIsInvalid(Double invalidPrice) throws Exception {
+        String payload = String.format("""
+                {
+                    "name": "Laptop",
+                    "price": %f
+                }
+                """, invalidPrice);
+
+        mockMvc.perform(post("/api/v1/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", anyOf(
+                        is("price must be greater than 0"),
+                        is("price must not be null"))));
     }
 }
