@@ -50,14 +50,9 @@ public class ProductService {
 
     @Transactional
     public ProductResponse update(Long id, ProductRequest productRequest) {
-        Product product = productRepository.findById(id).orElseGet(
-                Product::new
-        );
-        //.orElseThrow(() -> new ProductNotFoundException(id));
-        //productMapper.updateProductFromRequest(productRequest, product);
-        product.setId(id);
-        product.setName(productRequest.name());
-        product.setPrice(productRequest.price());
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        productMapper.updateProductFromRequest(productRequest, product);
         productRepository.save(product);
         return productMapper.toProductResponse(product);
     }
