@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -29,11 +31,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex,
             HttpServletRequest request) {
-        String expectedType = ex.getRequiredType() != null
-                ? ex.getRequiredType().getSimpleName()
-                : "valid type";
+        String expectedType = getExpectedType(ex.getRequiredType());
         String message = String.format(
-                "Parameter '%s' must be of type %s.",
+                "Parameter '%s' must be a valid %s.",
                 ex.getName(),
                 expectedType
         );
@@ -74,13 +74,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(
-            HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleException(Exception ex,
+                                                         HttpServletRequest request) {
+        log.error(ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.of(
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "An unexpected error occurred.",
                         request.getRequestURI()
                 ));
+    }
+
+    private String getExpectedType(Class<?> type) {
+        return type != null
+                ? type.getSimpleName()
+                : "type";
     }
 }

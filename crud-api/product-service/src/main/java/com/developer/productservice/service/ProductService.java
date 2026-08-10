@@ -47,4 +47,25 @@ public class ProductService {
                 .map(productMapper::toProductResponse)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
+
+    @Transactional
+    public ProductResponse update(Long id, ProductRequest productRequest) {
+        Product product = productRepository.findById(id).orElseGet(
+                Product::new
+        );
+        //.orElseThrow(() -> new ProductNotFoundException(id));
+        //productMapper.updateProductFromRequest(productRequest, product);
+        product.setId(id);
+        product.setName(productRequest.name());
+        product.setPrice(productRequest.price());
+        productRepository.save(product);
+        return productMapper.toProductResponse(product);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+        productRepository.delete(product);
+    }
 }
