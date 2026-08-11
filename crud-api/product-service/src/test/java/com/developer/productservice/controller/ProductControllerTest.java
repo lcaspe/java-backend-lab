@@ -182,7 +182,8 @@ public class ProductControllerTest {
                         .content(payload))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Product not found with id " + productIdToUpdate));
+                .andExpect(jsonPath("$.error")
+                        .value("Product not found with id " + productIdToUpdate));
     }
 
     @Test
@@ -201,6 +202,7 @@ public class ProductControllerTest {
         mockMvc.perform(delete("/api/v1/products/{id}", productIdToDelete))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.error").value("Product not found with id " + productIdToDelete));
+                .andExpect(jsonPath("$.error")
+                        .value("Product not found with id " + productIdToDelete));
     }
 }
